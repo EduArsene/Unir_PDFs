@@ -1,7 +1,6 @@
-
 import PyPDF2
 import tkinter as tk
-from tkinter import filedialog, messagebox, scrolledtext
+from tkinter import filedialog, messagebox
 import os
 import threading
 
@@ -35,8 +34,8 @@ def merge_pdfs(input_pdfs, output_pdf, progress_window):
         progress_window.destroy()  # Cerrar la ventana de progreso
 
 def merge_selected_pdfs():
-    input_pdfs = text_area.get(1.0, tk.END).strip().split("\n")
-    input_pdfs = [pdf for pdf in input_pdfs if pdf]  
+    input_pdfs = listbox_files.get(0, tk.END)
+    input_pdfs = [pdf for pdf in input_pdfs if pdf]  # Filtrar las entradas vacías
     if input_pdfs:
         output_pdf = filedialog.asksaveasfilename(defaultextension=".pdf", 
                                                     filetypes=[("PDF Files", "*.pdf")],
@@ -52,58 +51,60 @@ def merge_selected_pdfs():
             abrir_directorio(output_pdf)
     else:
         messagebox.showwarning("Cuidado", "PDF no seleccionado.")
+
 def select_files():
     files = filedialog.askopenfilenames(filetypes=[("PDF Files", "*.pdf")])
     if files:
-        current_files = set(text_area.get(1.0, tk.END).strip().split("\n"))  # Get current files in the text area
+        current_files = set(listbox_files.get(0, tk.END))  
         for file in files:
             file_name = os.path.basename(file)
             if file not in current_files:  
-                text_area.insert(tk.END, file + "\n")  
-                text_area_vista.insert(tk.END, file_name + "\n")  
+                listbox_files.insert(tk.END, file)  
                 current_files.add(file) 
-                
             else:
                 messagebox.showinfo("Archivo ya ingresado", f"El archivo '{file_name}' ya está en la lista.")
                 
 def clear_files():
-    # Clear the text areas
-    text_area.delete(1.0, tk.END)
-    text_area_vista.delete(1.0, tk.END)
+    # Clear the listbox
+    listbox_files.delete(0, tk.END)
     messagebox.showinfo("Aviso", "Lista limpia")
 
 hide_console()
+
 root = tk.Tk()
 root.title("UNIR PDFS")
-root.geometry("500x470")
-root.configure(bg="black") 
+root.geometry("760x470")
+root.configure(bg="#2C3E50") 
 
-title_label = tk.Label(root, text="Lista de Archivos a unir", font=("Arial", 16), bg="black", 
-                       fg="white",highlightbackground="#00EFEF", highlightthickness=2)
-title_label.pack(pady=10)
+# Título principal
+title_label = tk.Label(root, text="Lista de pdf's a unir", font=("Arial", 16), bg="#2C3E50", 
+                       fg="white", highlightbackground="#00EFEF", highlightthickness=2)
+title_label.pack(pady=15)
 
-text_area = scrolledtext.ScrolledText(root, width=45, height=15, bg="#FFFFFF", fg="#000000", font=("Arial", 12))
-text_area.pack()
-text_area.place(x=40, y=120)
+# Listbox para mostrar los archivos PDF seleccionados
+listbox_files = tk.Listbox(root, width=70, height=15, bg="#34495E", fg="#ECF0F1", font=("Arial", 12), 
+                           selectbackground="#1ABC9C", selectmode=tk.MULTIPLE, activestyle="none")
+listbox_files.pack(pady=10)
+listbox_files.place(x=40, y=120)
 
-text_area_vista = scrolledtext.ScrolledText(root, width=45, height=15, bg="#FFFFFF", fg="#000000", font=("Arial", 12)
-                                            )
-text_area_vista.pack()
-text_area_vista.place(x=40, y=120)
+# Boton para seleccionar archivos
+boton_seleccionar = tk.Button(root, text="SELECCIONAR", command=select_files, bg="#1ABC9C", fg="white", 
+                              font=("Arial", 12, "bold"), activeforeground="white", activebackground="#00EFEF", 
+                              highlightbackground="red", highlightthickness=2)
+boton_seleccionar.pack(pady=10)
 
-select_button = tk.Button(root, text="SELECCIONAR", command=select_files, bg="black", fg="white", font=("Arial", 12,"bold"), activeforeground="white",activebackground="#00EFEF"
-                          ,highlightbackground="red", highlightthickness=2)
-select_button.pack(pady=10)
+# Botón para unir los PDFs seleccionados
+boton_unir = tk.Button(root, text="    UNIR    ", command=merge_selected_pdfs, bg="#1ABC9C", fg="white", 
+                       font=("Arial", 12, "bold"), activeforeground="white", activebackground="#00EFEF", 
+                       highlightbackground="red", highlightthickness=2)
+boton_unir.pack()
+boton_unir.place(x=220, y=410)
 
-merge_button = tk.Button(root, text="    UNIR    ", command=merge_selected_pdfs, bg="black", fg="white", font=("Arial", 12,"bold"),activeforeground="white", activebackground="#00EFEF"
-                         ,highlightbackground="red", highlightthickness=2)
-merge_button.pack()
-merge_button.place(x=140, y=410)
+# Botón para limpiar la lista de archivos
+boton_borrar = tk.Button(root, text="  LIMPIAR  ", command=clear_files, bg="#1ABC9C", fg="white", 
+                         font=("Arial", 12, "bold"), activeforeground="white", activebackground="#00EFEF", 
+                         highlightbackground="skyblue", highlightthickness=2)
+boton_borrar.pack()
+boton_borrar.place(x=420, y=410)
 
-clear_button = tk.Button(root, text="  LIMPIAR  ", command=clear_files, bg="black", fg="white", font=("Arial", 12,"bold"),activeforeground="white", activebackground="#00EFEF" 
-                         ,highlightbackground="skyblue", highlightthickness=2)
-clear_button.pack()
-
-clear_button.place(x=260, y=410)
-root.mainloop()
 root.mainloop()
