@@ -4,4 +4,4 @@ Herramientas para poder unir varios PDF con Python
 Es necesario instalar:
 pip install PyPDF2
 
-![Vista previa del diseño]( https://github.com/EduArsene/Unir_PDFs/vista_diseño.png)
+![Vista previa del diseño]( https://github.com/EduArsene/Unir_PDFs/proyecto-unirpdf.png)
