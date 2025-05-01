@@ -1,2 +1,2 @@
 # Unir_PDFs
-Herramientas para poder varios PDF con Python
+Herramientas para poder unir varios PDF con Python
