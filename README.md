@@ -5,7 +5,7 @@ Es necesario instalar:
 pip install PyPDF2
 
 Vista previa
-![Vista previa del diseño](https://github.com/EduArsene/Unir_PDFs/proyecto-unirpdf.png)
+![Vista previa del diseño](https://github.com/EduArsene/Unir_PDFs/blob/main/proyecto-unirpdf.png)
 
 ## Instrucciones de uso
 
